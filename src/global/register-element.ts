@@ -9,7 +9,15 @@ import {
   ElTabPane,
   ElCheckbox,
   ElLink,
-  ElFormItem
+  ElFormItem,
+  ElContainer,
+  ElHeader,
+  ElAside,
+  ElMain,
+  ElMenu,
+  ElMenuItem,
+  ElMenuItemGroup,
+  ElSubmenu
 } from 'element-plus'
 
 const components = [
@@ -20,7 +28,15 @@ const components = [
   ElTabPane,
   ElCheckbox,
   ElLink,
-  ElFormItem
+  ElFormItem,
+  ElContainer,
+  ElHeader,
+  ElAside,
+  ElMain,
+  ElMenu,
+  ElMenuItem,
+  ElMenuItemGroup,
+  ElSubmenu
 ]
 // 封装element-plus的组件局部注册
 export default function (app: App): void {
