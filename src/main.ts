@@ -18,18 +18,18 @@ import { setupStore } from './store'
 
 const app = createApp(App)
 
-app.use(router)
+app.use(globalRegister)
 app.use(store)
+setupStore()
+app.use(router)
 
+app.mount('#app')
 // 全局注册element-plus
 // app.use(ElementPlus)
 // 方式一：app.use(function(app)) app.use可以传入一个函数，参数默认传入app
-app.use(globalRegister)
+// app.use(globalRegister)
 // 方式二：
 // globalRegister(app)
-setupStore()
-
-app.mount('#app')
 
 // console.log(process.env.VUE_APP_BASE_URL)
 // console.log(process.env.VUE_APP_BASE_NAME)

@@ -7,6 +7,7 @@ import {
 } from '@/service/login/login'
 import localCache from '@/utils/cache'
 import router from '@/router'
+import { mapMenuToRoutes } from '@/utils/map-menus'
 
 // 导入login和root的类型
 import { IRootState } from '../types'
@@ -32,6 +33,13 @@ const loginModule: Module<ILoginState, IRootState> = {
     },
     changeUserMenus(state, userMenus: any) {
       state.userMenus = userMenus
+
+      // 在这里进行路由映射 userMenus => routes
+      const routes = mapMenuToRoutes(userMenus)
+      // 将routes 添加到 router.main.children里
+      routes.forEach((route) => {
+        router.addRoute('main', route)
+      })
     }
   },
   getters: {},

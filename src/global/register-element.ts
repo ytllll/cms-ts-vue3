@@ -17,7 +17,19 @@ import {
   ElMenu,
   ElMenuItem,
   ElMenuItemGroup,
-  ElSubmenu
+  ElSubmenu,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElIcon,
+  ElAvatar,
+  ElRow,
+  ElCol,
+  ElSelect,
+  ElOption,
+  ElDatePicker,
+  ElBreadcrumb,
+  ElBreadcrumbItem
 } from 'element-plus'
 
 const components = [
@@ -36,7 +48,19 @@ const components = [
   ElMenu,
   ElMenuItem,
   ElMenuItemGroup,
-  ElSubmenu
+  ElSubmenu,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElIcon,
+  ElAvatar,
+  ElRow,
+  ElCol,
+  ElSelect,
+  ElOption,
+  ElDatePicker,
+  ElBreadcrumb,
+  ElBreadcrumbItem
 ]
 // 封装element-plus的组件局部注册
 export default function (app: App): void {
