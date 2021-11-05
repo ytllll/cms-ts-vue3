@@ -11,7 +11,7 @@ export interface ILoginResult {
 }
 
 // post请求的数据类型
-export interface IDataType<T = any> {
-  code: number
-  data: T
-}
+// export interface IDataType<T = any> {
+//   code: number
+//   data: T
+// }

@@ -85,7 +85,7 @@ class TLRequest {
   }
 
   // 发送请求
-  request<T>(config: TLRequestConfig<T>): Promise<T> {
+  request<T = any>(config: TLRequestConfig<T>): Promise<T> {
     return new Promise((resolve, reject) => {
       // 1. 单个请求对请求config的处理
       // 单独的拦截器
@@ -122,19 +122,19 @@ class TLRequest {
     })
   }
 
-  get<T>(config: TLRequestConfig<T>): Promise<T> {
+  get<T = any>(config: TLRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'GET' })
   }
 
-  post<T>(config: TLRequestConfig<T>): Promise<T> {
+  post<T = any>(config: TLRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'POST' })
   }
 
-  delete<T>(config: TLRequestConfig<T>): Promise<T> {
+  delete<T = any>(config: TLRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'DELETE' })
   }
 
-  patch<T>(config: TLRequestConfig<T>): Promise<T> {
+  patch<T = any>(config: TLRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'PATCH' })
   }
 }
