@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, watch } from 'vue'
+import { defineComponent, PropType, ref, watch, computed } from 'vue'
 import { IFromItem } from '../types'
 
 export default defineComponent({
@@ -85,7 +85,7 @@ export default defineComponent({
   emits: ['update:modalValue'],
   setup(props, { emit }) {
     // 解构modalValue，创建自己的对象，不能直接引用
-    const formData = ref({ ...props.modelValue })
+    const formData = computed(() => ({ ...props.modelValue }))
     // 通过自己监听formData发送改变，把formData传送出去
     watch(formData, (newValue) => emit('update:modalValue', newValue), {
       deep: true
