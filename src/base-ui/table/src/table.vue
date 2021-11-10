@@ -30,7 +30,7 @@
         width="60"
       ></el-table-column>
       <template v-for="item in propsList" :key="item.prop">
-        <el-table-column v-bind="item" align="center">
+        <el-table-column v-bind="item" align="center" show-overflow-tooltip>
           <template #default="scope">
             <slot :name="item.slotName" :row="scope.row">
               {{ scope.row[item.prop] }}
@@ -42,11 +42,11 @@
     <div class="footer">
       <slot name="footer">
         <el-pagination
-          v-model:currentPage="currentPage4"
-          :page-sizes="[10, 15, 20, 50]"
-          :page-size="100"
+          :currentPage="page.currentPage"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="page.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="listCount"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         >
@@ -61,9 +61,17 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
+    page: {
+      type: Object,
+      default: () => ({ currentPage: 1, pageSize: 10 })
+    },
     title: {
       type: String,
       default: ''
+    },
+    listCount: {
+      type: Number,
+      default: 0
     },
     listData: {
       type: Array,
@@ -82,13 +90,24 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['selectionChange'],
+  emits: ['selectionChange', 'update:page'],
   setup(props, { emit }) {
     const handleSelectChange = (value: any) => {
       emit('selectionChange', value)
     }
+
+    const handleSizeChange = (pageSize: number) => {
+      emit('update:page', { ...props.page, pageSize })
+    }
+
+    const handleCurrentChange = (currentPage: number) => {
+      emit('update:page', { ...props.page, currentPage })
+    }
+
     return {
-      handleSelectChange
+      handleSelectChange,
+      handleSizeChange,
+      handleCurrentChange
     }
   }
 })

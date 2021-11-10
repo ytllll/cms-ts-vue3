@@ -3,6 +3,8 @@
     <tl-table
       v-bind="contentTableConfig"
       :listData="datalist"
+      :listCount="dataCount"
+      v-model:page="pageInfo"
       @selectionChange="handleSelectionChange"
     >
       <!-- 1. header中的插槽 -->
@@ -17,15 +19,6 @@
       </template>
 
       <!-- 2. 用户列表中的插槽 -->
-      <template #status="scope">
-        <el-button
-          plain
-          size="mini"
-          :type="scope.row.enable ? 'success' : 'danger'"
-        >
-          {{ scope.row.enable ? '启用' : '禁用' }}
-        </el-button>
-      </template>
       <template #createAt="scope">
         <!-- utc时间格式化 -- 正常时间格式化 -->
         <span>{{ $filters.formatTime(scope.row.createAt) }}</span>
@@ -43,12 +36,23 @@
           >
         </div>
       </template>
+
+      <!-- 在pageContent中动态的插入剩余的插槽 -->
+      <template
+        v-for="item in otherPropSlots"
+        :key="item.prop"
+        #[item.slotName]="scope"
+      >
+        <template v-if="item.slotName">
+          <slot :name="item.slotName" :row="scope.row"></slot>
+        </template>
+      </template>
     </tl-table>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref, watch } from 'vue'
 import { useStore } from '@/store'
 
 import TlTable from '@/base-ui/table'
@@ -69,20 +73,48 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
-    store.dispatch('system/getPageListAction', {
-      pageName: props.pageName,
-      qureyInfo: {
-        offset: 0,
-        size: 10
-      }
-    })
 
+    // 双向绑定pageInfo
+    const pageInfo = ref({ currentPage: 1, pageSize: 10 })
+    watch(pageInfo, () => getPageData())
+
+    // 发送网络请求  注意：因为接口定义页数是从0开始的，而table分页只能从第一页开始，所以offset的当前页要-1来发送请求
+    const getPageData = (queryInfo: any = {}) => {
+      store.dispatch('system/getPageListAction', {
+        pageName: props.pageName,
+        queryInfo: {
+          offset: (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
+          size: pageInfo.value.pageSize,
+          ...queryInfo
+        }
+      })
+    }
+    getPageData()
+
+    // 从vuex中获取数据
     const datalist = computed(() =>
       store.getters[`system/getListData`](props.pageName)
     )
+    const dataCount = computed(() =>
+      store.getters[`system/getListCount`](props.pageName)
+    )
+
+    // 获取其他的动态插槽名称
+    const otherPropSlots = props.contentTableConfig?.propsList.filter(
+      (item: any) => {
+        if (item.slotName === 'createAt') return false
+        if (item.slotName === 'updateAt') return false
+        if (item.slotName === 'handler') return false
+        return true
+      }
+    )
 
     return {
-      datalist
+      datalist,
+      getPageData,
+      dataCount,
+      pageInfo,
+      otherPropSlots
     }
   }
 })

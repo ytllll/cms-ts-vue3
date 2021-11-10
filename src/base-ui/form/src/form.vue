@@ -14,14 +14,16 @@
                 <el-input
                   :placeholder="item.placeholder"
                   :show-password="item.type === 'password'"
-                  v-model="formData[`${item.field}`]"
+                  :model-value="modelValue[`${item.field}`]"
+                  @update:modelValue="handleValueChange($event, item.field)"
                 />
               </template>
               <template v-else-if="item.type === 'select'">
                 <el-select
                   :placeholder="item.placeholder"
                   style="width: 100%"
-                  v-model="formData[`${item.field}`]"
+                  :model-value="modelValue[`${item.field}`]"
+                  @update:modelValue="handleValueChange($event, item.field)"
                 >
                   <el-option
                     v-for="option in item.options"
@@ -35,7 +37,8 @@
                 <el-date-picker
                   style="width: 100%"
                   v-bind="item.otherOptions"
-                  v-model="formData[`${item.field}`]"
+                  :model-value="modelValue[`${item.field}`]"
+                  @update:modelValue="handleValueChange($event, item.field)"
                 ></el-date-picker>
               </template>
             </el-form-item>
@@ -50,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, watch, computed } from 'vue'
+import { defineComponent, PropType } from 'vue'
 import { IFromItem } from '../types'
 
 export default defineComponent({
@@ -82,17 +85,23 @@ export default defineComponent({
       })
     }
   },
-  emits: ['update:modalValue'],
+  emits: ['update:modelValue'],
   setup(props, { emit }) {
     // 解构modalValue，创建自己的对象，不能直接引用
-    const formData = computed(() => ({ ...props.modelValue }))
+    // const formData = ref({ ...props.modelValue })
     // 通过自己监听formData发送改变，把formData传送出去
-    watch(formData, (newValue) => emit('update:modalValue', newValue), {
-      deep: true
-    })
+    // watch(formData, (newValue) => emit('update:modelValue', newValue), {
+    //   deep: true
+    // })
+
+    // 不使用双向绑定，自己监听数据变化
+    const handleValueChange = (value: any, field: string) => {
+      emit('update:modelValue', { ...props.modelValue, [field]: value })
+    }
 
     return {
-      formData
+      // formData
+      handleValueChange
     }
   }
 })

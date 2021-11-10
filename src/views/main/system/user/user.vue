@@ -1,10 +1,25 @@
 <template>
   <div class="user">
-    <page-search :searchFormConfig="searchFormConfig" />
+    <page-search
+      :searchFormConfig="searchFormConfig"
+      @resetBtnClick="handleResetClick"
+      @searchBtnClick="handleSearchClick"
+    />
     <page-content
+      ref="pageContentRef"
       :contentTableConfig="contentTableConfig"
       pageName="users"
-    ></page-content>
+    >
+      <template #status="scope">
+        <el-button
+          plain
+          size="mini"
+          :type="scope.row.enable ? 'success' : 'danger'"
+        >
+          {{ scope.row.enable ? '启用' : '禁用' }}
+        </el-button>
+      </template>
+    </page-content>
   </div>
 </template>
 
@@ -17,6 +32,8 @@ import PageContent from '@/components/page-content'
 import { searchFormConfig } from './config/search.config'
 import { contentTableConfig } from './config/content.config'
 
+import { usePageSearch } from '@/hooks/uesPageSearch'
+
 export default defineComponent({
   name: 'users',
   components: {
@@ -24,9 +41,15 @@ export default defineComponent({
     PageContent
   },
   setup() {
+    const [pageContentRef, handleResetClick, handleSearchClick] =
+      usePageSearch()
+
     return {
       searchFormConfig,
-      contentTableConfig
+      contentTableConfig,
+      handleResetClick,
+      handleSearchClick,
+      pageContentRef
     }
   }
 })

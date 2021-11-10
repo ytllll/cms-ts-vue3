@@ -9,7 +9,12 @@
           <el-button icon="el-icon-refresh" @click="handleResetClick"
             >重置</el-button
           >
-          <el-button type="primary" icon="el-icon-search">搜索</el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            @click="handleQueryClick"
+            >搜索</el-button
+          >
         </div>
       </template>
     </page-form>
@@ -30,7 +35,8 @@ export default defineComponent({
   components: {
     PageForm
   },
-  setup(props) {
+  emits: ['resetBtnClick', 'searchBtnClick'],
+  setup(props, { emit }) {
     // 双向绑定的属性应该由配置文件的field来决定'
     // 优化一：formData中的属性应该动态来决定
     const formItems = props.searchFormConfig?.formItems ?? []
@@ -43,12 +49,23 @@ export default defineComponent({
 
     // 优化二：当用户点击重置按钮
     const handleResetClick = () => {
+      // for (const key in formOriginData) {
+      //   formData.value[`${key}`] = formOriginData[key]
+      // }
+
       formData.value = formOriginData
+      emit('resetBtnClick')
+    }
+
+    // 优化三：实现搜索按钮
+    const handleQueryClick = () => {
+      emit('searchBtnClick', formData.value)
     }
 
     return {
       formData,
-      handleResetClick
+      handleResetClick,
+      handleQueryClick
     }
   }
 })

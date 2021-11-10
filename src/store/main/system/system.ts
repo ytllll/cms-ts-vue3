@@ -10,7 +10,9 @@ const systemModule: Module<ISystemState, IRootState> = {
       usersList: [],
       usersCount: 0,
       roleList: [],
-      roleCount: 0
+      roleCount: 0,
+      goodsList: [],
+      goodsCount: 0
     }
   },
   mutations: {
@@ -25,18 +27,23 @@ const systemModule: Module<ISystemState, IRootState> = {
     },
     changeRoleCount(state, roleCount: number) {
       state.roleCount = roleCount
+    },
+    changeGoodsList(state, goodsList: any[]) {
+      state.goodsList = goodsList
+    },
+    changeGoodsCount(state, goodsCount: number) {
+      state.goodsCount = goodsCount
     }
   },
   getters: {
     getListData(state) {
       return (pageName: string) => {
         return (state as any)[`${pageName}List`]
-        // switch (pageName) {
-        //   case 'users':
-        //     return state.usersList
-        //   case 'role':
-        //     return state.roleList
-        // }
+      }
+    },
+    getListCount(state) {
+      return (pageName: string) => {
+        return (state as any)[`${pageName}Count`]
       }
     }
   },
@@ -58,12 +65,12 @@ const systemModule: Module<ISystemState, IRootState> = {
       const pageResult = await getPageListData(pageUrl, payload.queryInfo)
 
       // 3. 将数据存储到state中
-      const { list, titleCount } = pageResult.data
+      const { list, totalCount } = pageResult.data
       const pageNameFirstCharUpper =
         pageName.slice(0, 1).toUpperCase() + pageName.slice(1)
       // 通过mutation改变state
       commit(`change${pageNameFirstCharUpper}List`, list)
-      commit(`change${pageNameFirstCharUpper}Count`, titleCount)
+      commit(`change${pageNameFirstCharUpper}Count`, totalCount)
     }
   }
 }
