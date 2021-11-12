@@ -9,13 +9,14 @@
     >
       <!-- 1. header中的插槽 -->
       <template #headerHandle>
-        <el-button type="primary" size="medium">新建用户</el-button>
-        <el-button type="danger" size="medium">删除选中</el-button>
         <el-button
+          v-if="isCreate"
           type="primary"
           size="medium"
-          icon="el-icon-refresh"
-        ></el-button>
+          @click="handleNewClick"
+        >
+          {{ `新建${contentTableConfig.title.slice(0, 2)}` }}
+        </el-button>
       </template>
 
       <!-- 2. 用户列表中的插槽 -->
@@ -26,12 +27,23 @@
       <template #updateAt="scope">
         <span>{{ $filters.formatTime(scope.row.updateAt) }}</span>
       </template>
-      <template #handler>
+      <template #handler="scope">
         <div class="handler">
-          <el-button size="mini" type="text" icon="el-icon-edit"
-            >编辑</el-button
+          <el-button
+            v-if="isUpdate"
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleEditClick(scope.row)"
           >
-          <el-button size="mini" type="text" icon="el-icon-delete"
+            编辑
+          </el-button>
+          <el-button
+            v-if="isDelete"
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDeleteClick(scope.row)"
             >删除</el-button
           >
         </div>
@@ -54,6 +66,7 @@
 <script lang="ts">
 import { defineComponent, computed, ref, watch } from 'vue'
 import { useStore } from '@/store'
+import { usePermission } from '@/hooks/usePermission'
 
 import TlTable from '@/base-ui/table'
 
@@ -71,8 +84,14 @@ export default defineComponent({
   components: {
     TlTable
   },
-  setup(props) {
+  emits: ['newBtnClick', 'EditBtnClick'],
+  setup(props, { emit }) {
     const store = useStore()
+
+    const isCreate = usePermission(props.pageName, 'create')
+    const isUpdate = usePermission(props.pageName, 'update')
+    const isDelete = usePermission(props.pageName, 'delete')
+    const isQuery = usePermission(props.pageName, 'query')
 
     // 双向绑定pageInfo
     const pageInfo = ref({ currentPage: 1, pageSize: 10 })
@@ -80,6 +99,14 @@ export default defineComponent({
 
     // 发送网络请求  注意：因为接口定义页数是从0开始的，而table分页只能从第一页开始，所以offset的当前页要-1来发送请求
     const getPageData = (queryInfo: any = {}) => {
+      if (!isQuery) return // 如果没有查询权限，直接返回
+
+      // 派发保存当前查询条件的信息
+      store.dispatch('system/saveQueryInfoAction', {
+        pageInfo: pageInfo.value,
+        queryInfo: queryInfo
+      })
+
       store.dispatch('system/getPageListAction', {
         pageName: props.pageName,
         queryInfo: {
@@ -109,12 +136,41 @@ export default defineComponent({
       }
     )
 
+    // 这里可以进行选中行的数据操作
+    const handleSelectionChange = (e: any) => {
+      console.log(e)
+    }
+
+    // 删除/编辑/新建操作
+    const handleDeleteClick = (item: any) => {
+      store.dispatch('system/deletePageDataAction', {
+        pageName: props.pageName,
+        id: item.id
+      })
+    }
+
+    const handleNewClick = () => {
+      emit('newBtnClick')
+    }
+
+    const handleEditClick = (item: any) => {
+      emit('EditBtnClick', item)
+    }
+
     return {
+      props,
       datalist,
       getPageData,
       dataCount,
       pageInfo,
-      otherPropSlots
+      otherPropSlots,
+      isCreate,
+      isUpdate,
+      isDelete,
+      handleSelectionChange,
+      handleDeleteClick,
+      handleNewClick,
+      handleEditClick
     }
   }
 })

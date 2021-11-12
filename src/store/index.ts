@@ -2,6 +2,8 @@ import { createStore, Store, useStore as useVuexStore } from 'vuex'
 
 import { IRootState, IStoreType } from './types'
 
+import { getPageListData } from '@/service/main/system/system'
+
 import login from './login/login'
 import system from './main/system/system'
 
@@ -10,12 +12,38 @@ const store = createStore<IRootState>({
     return {
       name: 'ytllll',
       age: 18,
-      height: '1.8'
+      entireDepartment: [],
+      entireRole: []
     }
   },
-  mutations: {},
+  mutations: {
+    changeEntireDepartment(state, list) {
+      state.entireDepartment = list
+    },
+    changeEntireRole(state, list) {
+      state.entireRole = list
+    }
+  },
   getters: {},
-  actions: {},
+  actions: {
+    async getInitialDataAction({ commit }) {
+      // 1. 请求部门和角色数据
+      const departmentResult = await getPageListData('/department/list', {
+        offset: 0,
+        size: 1000
+      })
+      const { list: departmentList } = departmentResult.data
+
+      const roleResult = await getPageListData('/role/list', {
+        offset: 0,
+        size: 1000
+      })
+      const { list: roleList } = roleResult.data
+
+      commit('changeEntireDepartment', departmentList)
+      commit('changeEntireRole', roleList)
+    }
+  },
   modules: {
     // 注册状态管理的login模块
     login,
@@ -26,6 +54,7 @@ const store = createStore<IRootState>({
 // 解决刷新页面，Vuex中的数据丢失问题
 export function setupStore() {
   store.dispatch('login/loadLocalLogin')
+  store.dispatch('getInitialDataAction')
 }
 
 // 为了更好的使用vuex和typescript，自己封装的useStore

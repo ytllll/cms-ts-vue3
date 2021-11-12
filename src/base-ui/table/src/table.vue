@@ -15,6 +15,9 @@
       border
       style="width: 100%"
       @selection-change="handleSelectChange"
+      row-key="id"
+      :tree-props="{ children: 'children' }"
+      v-bind="childrenProps"
     >
       <el-table-column
         v-if="showSelectColumn"
@@ -39,7 +42,7 @@
         </el-table-column>
       </template>
     </el-table>
-    <div class="footer">
+    <div class="footer" v-if="showFooter">
       <slot name="footer">
         <el-pagination
           :currentPage="page.currentPage"
@@ -88,6 +91,14 @@ export default defineComponent({
     showSelectColumn: {
       type: Boolean,
       default: false
+    },
+    childrenProps: {
+      type: Object,
+      default: () => ({})
+    },
+    showFooter: {
+      type: Boolean,
+      default: true
     }
   },
   emits: ['selectionChange', 'update:page'],
