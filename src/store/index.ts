@@ -54,7 +54,8 @@ const store = createStore<IRootState>({
 // 解决刷新页面，Vuex中的数据丢失问题
 export function setupStore() {
   store.dispatch('login/loadLocalLogin')
-  store.dispatch('getInitialDataAction')
+  // 在这里发送数据请求，可能会再登录的时候还没拿到token就发送了请求产生bug
+  // store.dispatch('getInitialDataAction')
 }
 
 // 为了更好的使用vuex和typescript，自己封装的useStore
