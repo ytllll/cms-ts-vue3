@@ -34,7 +34,8 @@ import {
   ElTableColumn,
   ElPagination,
   ElImage,
-  ElDialog
+  ElDialog,
+  ElTree
 } from 'element-plus'
 
 const components = [
@@ -70,7 +71,8 @@ const components = [
   ElTableColumn,
   ElPagination,
   ElImage,
-  ElDialog
+  ElDialog,
+  ElTree
 ]
 // 封装element-plus的组件局部注册
 export default function (app: App): void {

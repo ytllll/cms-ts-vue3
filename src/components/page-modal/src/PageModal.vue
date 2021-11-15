@@ -8,6 +8,7 @@
       destroy-on-close
     >
       <page-form v-bind="modalConfig" v-model="formData" />
+      <slot></slot>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
@@ -39,6 +40,10 @@ export default defineComponent({
     pageName: {
       type: String,
       required: true
+    },
+    otherInfo: {
+      type: Object,
+      default: () => ({})
     }
   },
   components: {
@@ -66,14 +71,14 @@ export default defineComponent({
         // 编辑
         store.dispatch('system/editPageDataAction', {
           pageName: props.pageName,
-          editData: { ...formData.value },
+          editData: { ...formData.value, ...props.otherInfo },
           id: props.defaultInfo.id
         })
       } else {
         // 新建
         store.dispatch('system/createPageDataAction', {
           pageName: props.pageName,
-          newData: { ...formData.value }
+          newData: { ...formData.value, ...props.otherInfo }
         })
       }
     }
