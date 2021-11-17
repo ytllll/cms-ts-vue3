@@ -1,52 +1,48 @@
 <template>
   <div class="dashboard">
-    <div ref="divRef" :style="{ width: '600px', height: '500px' }"></div>
+    <el-row :gutter="10">
+      <el-col :span="7">
+        <tl-card title="分类商品数量（饼图）"></tl-card>
+      </el-col>
+      <el-col :span="10">
+        <tl-card title="不同城市商品销量"></tl-card>
+      </el-col>
+      <el-col :span="7">
+        <tl-card title="分类商品数量（玫瑰图）"></tl-card>
+      </el-col>
+    </el-row>
+    <el-row :gutter="10" class="content-row">
+      <el-col :span="12">
+        <tl-card title="分类商品的销量"></tl-card>
+      </el-col>
+      <el-col :span="12">
+        <tl-card title="分类商品的收藏"></tl-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent } from 'vue'
+import { useStore } from 'vuex'
 
-import * as echarts from 'echarts'
+import TlCard from '@/base-ui/card'
 
 export default defineComponent({
   name: 'dashboard',
+  components: {
+    TlCard
+  },
   setup() {
-    const divRef = ref<HTMLElement>()
-
-    onMounted(() => {
-      // 1. 初始化echarts的实例
-      const echartsInstance = echarts.init(divRef.value!)
-      // 2. 编写配置文件
-      const option = {
-        title: {
-          text: 'ECharts 入门示例'
-        },
-        tooltip: {},
-        legend: {
-          data: ['销量']
-        },
-        xAxis: {
-          data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-        },
-        yAxis: {},
-        series: [
-          {
-            name: '销量',
-            type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
-          }
-        ]
-      }
-      // 3. 设置配置，并且开始绘制
-      echartsInstance.setOption(option)
-    })
-
-    return {
-      divRef
-    }
+    const store = useStore()
+    store.dispatch('dashboard/getDashboardDataAction')
+    return {}
   }
 })
 </script>
 
-<style scoped></style>
+<style scoped lang="less">
+.content-row {
+  margin-top: 10px;
+}
+</style>

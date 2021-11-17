@@ -6,6 +6,7 @@ import { getPageListData } from '@/service/main/system/system'
 
 import login from './login/login'
 import system from './main/system/system'
+import dashboard from './main/analysis/dashboard'
 
 const store = createStore<IRootState>({
   state() {
@@ -55,7 +56,8 @@ const store = createStore<IRootState>({
   modules: {
     // 注册状态管理的login模块
     login,
-    system
+    system,
+    dashboard
   }
 })
 
