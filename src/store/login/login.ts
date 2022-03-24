@@ -54,17 +54,18 @@ const loginModule: Module<ILoginState, IRootState> = {
       const loginResult = await accountLoginRequest(payload)
       // console.log(loginResult)
       console.log(loginResult.data.id, loginResult.data.token)
-      const { id, token } = loginResult.data
+      const { id, token, overTime } = loginResult.data
       // 通过mutations修改数据
       commit('changeToken', token)
       localCache.setCache('token', token)
+      localCache.setCache('overTIme', overTime)
 
       // 发送初始化数据的请求（完整的role/department） 调用根里的action要写第三个参数
       dispatch('getInitialDataAction', null, { root: true })
 
       // 2.请求用户信息
       const userInfoResult = await requestUserInfoById(id)
-      // console.log(userInfoResult)
+      console.log(userInfoResult)
       const userInfo = userInfoResult.data
       console.log(userInfo)
       commit('changeUserInfo', userInfo)
@@ -95,6 +96,15 @@ const loginModule: Module<ILoginState, IRootState> = {
       const userMenus = localCache.getCache('userMenus')
       if (userMenus) {
         commit('changeUserMenus', userMenus)
+      }
+    },
+    async getUserInfo({ commit }, payload: any) {
+      const { id } = payload
+      const userInfoResult = await requestUserInfoById(id)
+      const userInfo = userInfoResult.data
+      if (userInfo) {
+        commit('changeUserInfo', userInfo)
+        localCache.setCache('userInfo', userInfo)
       }
     }
     // phoneLoginAction({ commit }, payload: any) {

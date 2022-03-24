@@ -74,6 +74,8 @@ export default defineComponent({
 
 .el-header {
   height: 48px !important;
+  box-shadow: 0 10px 10px -10px rgb(202, 202, 202);
+  z-index: 100;
 }
 
 .el-aside {

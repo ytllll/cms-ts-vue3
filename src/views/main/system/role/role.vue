@@ -1,7 +1,12 @@
 <template>
   <div class="role">
-    <page-search :searchFormConfig="searchFormConfig" />
+    <page-search
+      :searchFormConfig="searchFormConfig"
+      @resetBtnClick="handleResetClick"
+      @searchBtnClick="handleSearchClick"
+    />
     <page-content
+      ref="pageContentRef"
       :contentTableConfig="contentTableConfig"
       pageName="role"
       @newBtnClick="handleNewData"
@@ -42,6 +47,7 @@ import { searchFormConfig } from './config/search.config'
 import { contentTableConfig } from './config/content.config'
 import { modalConfig } from './config/modal.config'
 
+import { usePageSearch } from '@/hooks/uesPageSearch'
 import { usePageModal } from '@/hooks/usePageModal'
 
 export default defineComponent({
@@ -52,13 +58,15 @@ export default defineComponent({
     PageModal
   },
   setup() {
+    const [pageContentRef, handleResetClick, handleSearchClick] =
+      usePageSearch()
+
     const store = useStore()
     // 处理pageModal的hook
     const elTreeRef = ref<InstanceType<typeof ElTree>>()
     const editCallback = (item: any) => {
       const leafKeys = mapMenuLeafKeys(item.menuList)
       nextTick(() => {
-        console.log(leafKeys)
         elTreeRef.value?.setCheckedKeys(leafKeys, false)
       })
     }
@@ -66,6 +74,7 @@ export default defineComponent({
       usePageModal(undefined, editCallback)
 
     const menus = computed(() => store.state.entireMenu)
+    console.log(menus)
 
     const otherInfo = ref({})
 
@@ -77,6 +86,9 @@ export default defineComponent({
     }
 
     return {
+      pageContentRef,
+      handleResetClick,
+      handleSearchClick,
       searchFormConfig,
       contentTableConfig,
       modalConfig,

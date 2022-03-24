@@ -5,7 +5,8 @@ import {
   deletePageData,
   getPageListData,
   createPageData,
-  editPageData
+  editPageData,
+  getPageData
 } from '@/service/main/system/system'
 
 const systemModule: Module<ISystemState, IRootState> = {
@@ -20,7 +21,14 @@ const systemModule: Module<ISystemState, IRootState> = {
       goodsList: [],
       goodsCount: 0,
       menuList: [],
-      menuCount: 0
+      menuCount: 0,
+      departmentList: [],
+      departmentCount: 0,
+      categoryList: [],
+      categoryCount: 0,
+      storyList: [],
+      storyCount: 0,
+      storyMain: {}
     }
   },
   mutations: {
@@ -50,6 +58,27 @@ const systemModule: Module<ISystemState, IRootState> = {
     },
     changeMenuCount(state, menuCount: number) {
       state.menuCount = menuCount
+    },
+    changeDepartmentList(state, departmentList: any[]) {
+      state.departmentList = departmentList
+    },
+    changeDepartmentCount(state, departmentCount: number) {
+      state.departmentCount = departmentCount
+    },
+    changeCategoryList(state, categoryList: any[]) {
+      state.categoryList = categoryList
+    },
+    changeCategoryCount(state, categoryCount: number) {
+      state.categoryCount = categoryCount
+    },
+    changeStoryList(state, storyList: any[]) {
+      state.storyList = storyList
+    },
+    changeStoryCount(state, storyCount: number) {
+      state.storyCount = storyCount
+    },
+    changeStoryMain(state, storyMain: any) {
+      state.storyMain = storyMain
     }
   },
   getters: {
@@ -75,6 +104,13 @@ const systemModule: Module<ISystemState, IRootState> = {
       commit('changeQueryInfo', info)
     },
 
+    async getPageDataAction({ commit }, payload: any) {
+      const pageUrl = payload.pageUrl
+      const pageResult = await getPageData(pageUrl)
+
+      commit('changeStoryMain', pageResult.data)
+    },
+
     async getPageListAction({ commit }, payload: any) {
       // 1. 根据传入的页面名称获取对应url
       const pageName = payload.pageName
@@ -94,8 +130,11 @@ const systemModule: Module<ISystemState, IRootState> = {
     async deletePageDataAction(context, payload: any) {
       // 1. 获取pageName和id
       // payload 需要 pageName 和 id
-      const { pageName, id } = payload
-      const pageUrl = `/${pageName}/${id}`
+      const { pageName, id, imageId } = payload
+      const pageUrl =
+        pageName === 'goods'
+          ? `/${pageName}/${id}/${imageId}`
+          : `/${pageName}/${id}`
 
       // 2. 调用删除的网络请求
       await deletePageData(pageUrl)
@@ -116,6 +155,7 @@ const systemModule: Module<ISystemState, IRootState> = {
       const pageUrl = `/${pageName}`
       await createPageData(pageUrl, newData)
 
+      if (pageName === 'story') return
       // 2. 请求最新的数据
       // 拿取当前查询信息
       const info = context.state.queryInfo

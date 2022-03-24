@@ -12,15 +12,19 @@
     "demo": "node ./demo.js"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^1.1.1",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "countup.js": "^2.1.0",
     "dayjs": "^1.10.7",
     "echarts": "^5.2.2",
     "element-plus": "^1.0.2-beta.65",
+    "highlight.js": "^11.4.0",
     "normalize.css": "^8.0.1",
     "vue": "^3.2.22",
     "vue-router": "^4.0.10",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "wangeditor": "^4.7.12"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",

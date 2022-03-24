@@ -1,6 +1,5 @@
 import { App } from 'vue'
-// 基础样式可以统一引用
-import 'element-plus/lib/theme-chalk/base.css'
+
 import {
   ElButton,
   ElForm,
@@ -12,6 +11,7 @@ import {
   ElFormItem,
   ElContainer,
   ElHeader,
+  ElFooter,
   ElAside,
   ElMain,
   ElMenu,
@@ -36,8 +36,16 @@ import {
   ElImage,
   ElDialog,
   ElTree,
-  ElCard
+  ElCard,
+  ElDescriptions,
+  ElDescriptionsItem,
+  ElTag,
+  ElTooltip,
+  ElUpload,
+  ElScrollbar
 } from 'element-plus'
+// 基础样式可以统一引用
+import 'element-plus/lib/theme-chalk/base.css'
 
 const components = [
   ElButton,
@@ -50,6 +58,7 @@ const components = [
   ElFormItem,
   ElContainer,
   ElHeader,
+  ElFooter,
   ElAside,
   ElMain,
   ElMenu,
@@ -74,7 +83,13 @@ const components = [
   ElImage,
   ElDialog,
   ElTree,
-  ElCard
+  ElCard,
+  ElDescriptions,
+  ElDescriptionsItem,
+  ElTag,
+  ElTooltip,
+  ElUpload,
+  ElScrollbar
 ]
 // 封装element-plus的组件局部注册
 export default function (app: App): void {

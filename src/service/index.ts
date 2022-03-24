@@ -28,7 +28,7 @@ const tlRequest = new TLRequest({
       return config
     },
     responseInterceptorCatch: (err) => {
-      // console.log('响应失败的拦截')
+      // console.log('响应失败的拦截', err)
       return err
     }
   }

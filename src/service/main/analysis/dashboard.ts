@@ -1,10 +1,17 @@
 import tlRequest from '../../index'
 
 enum DashboardAPI {
+  categoryGoodsAmount = '/goods/amount/list',
   categoryGoodsCount = '/goods/category/count',
   categoryGoodsSale = '/goods/category/sale',
   categoryGoodsFavor = '/goods/category/favor',
   addressGoodsSale = '/goods/address/sale'
+}
+
+export function getCategoryGoodsAmount() {
+  return tlRequest.get({
+    url: DashboardAPI.categoryGoodsAmount
+  })
 }
 
 export function getCategoryGoodsCount() {

@@ -4,6 +4,7 @@ import { IDashboardState } from './types'
 import { IRootState } from '../../types'
 
 import {
+  getCategoryGoodsAmount,
   getCategoryGoodsCount,
   getCategoryGoodsFavor,
   getCategoryGoodsSale,
@@ -14,6 +15,7 @@ const dashboardModule: Module<IDashboardState, IRootState> = {
   namespaced: true,
   state() {
     return {
+      categoryGoodsAmount: [],
       categoryGoodsCount: [],
       categoryGoodsSale: [],
       categoryGoodsFavor: [],
@@ -21,6 +23,9 @@ const dashboardModule: Module<IDashboardState, IRootState> = {
     }
   },
   mutations: {
+    changeCategoryGoodsAmount(state, list) {
+      state.categoryGoodsAmount = list
+    },
     changeCategoryGoodsCount(state, list) {
       state.categoryGoodsCount = list
     },
@@ -36,6 +41,8 @@ const dashboardModule: Module<IDashboardState, IRootState> = {
   },
   actions: {
     async getDashboardDataAction({ commit }) {
+      const categoryAmountResult = await getCategoryGoodsAmount()
+      commit('changeCategoryGoodsAmount', categoryAmountResult.data)
       const categoryCountResult = await getCategoryGoodsCount()
       commit('changeCategoryGoodsCount', categoryCountResult.data)
       const categorySaleResult = await getCategoryGoodsSale()

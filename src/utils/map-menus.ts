@@ -13,6 +13,14 @@ export function mapMenuToRoutes(userMenus: any[]): RouteRecordRaw[] {
     allRoutes.push(route.default)
   })
 
+  // 手动注册个人信息页路由
+  const personalRouter = allRoutes.find(
+    (route) => route.path === '/main/others/personal'
+  )
+  if (personalRouter) {
+    routes.push(personalRouter)
+  }
+
   // 2. 根据菜单获取需要添加的routes
   // userMenu中有多级菜单的话：
   // type === 1 -> children
@@ -48,12 +56,23 @@ export function pathMapToMenu(
   currentPath: string,
   breadcrumbs?: IBreadcrumb[]
 ): any {
+  if (currentPath === '/main/others/personal') {
+    breadcrumbs?.push({ name: '个人中心', path: '/main/others/personal' })
+    return {
+      id: 1000,
+      name: '个人中心',
+      children: null,
+      parentId: null,
+      type: 1,
+      utl: '/main/others/personal'
+    }
+  }
   for (const menu of userMenus) {
     if (menu.type === 1) {
       const findMenu = pathMapToMenu(menu.children ?? [], currentPath)
       if (findMenu) {
-        breadcrumbs?.push({ name: menu.name, path: menu.rul })
-        breadcrumbs?.push({ name: findMenu.name, path: findMenu.rul })
+        breadcrumbs?.push({ name: menu.name, path: menu.url })
+        breadcrumbs?.push({ name: findMenu.name, path: findMenu.url })
         return findMenu
       }
     } else if (menu.type === 2 && menu.url === currentPath) {

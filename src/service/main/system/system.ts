@@ -1,6 +1,12 @@
 import tlRequest from '../../index'
 import { IDataType } from '../../types'
 
+export function getPageData(url: string) {
+  return tlRequest.get<IDataType>({
+    url: url
+  })
+}
+
 export function getPageListData(url: string, queryInfo: any) {
   return tlRequest.post<IDataType>({
     url: url,

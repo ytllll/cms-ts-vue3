@@ -93,6 +93,8 @@ export default defineComponent({
     const isDelete = usePermission(props.pageName, 'delete')
     const isQuery = usePermission(props.pageName, 'query')
 
+    // console.log(props.contentTableConfig.title)
+
     // 双向绑定pageInfo
     const pageInfo = ref({ currentPage: 1, pageSize: 10 })
     watch(pageInfo, () => getPageData())
@@ -143,10 +145,18 @@ export default defineComponent({
 
     // 删除/编辑/新建操作
     const handleDeleteClick = (item: any) => {
-      store.dispatch('system/deletePageDataAction', {
-        pageName: props.pageName,
-        id: item.id
-      })
+      if (props.pageName === 'goods') {
+        store.dispatch('system/deletePageDataAction', {
+          pageName: props.pageName,
+          id: item.id,
+          imageId: item.imageId
+        })
+      } else {
+        store.dispatch('system/deletePageDataAction', {
+          pageName: props.pageName,
+          id: item.id
+        })
+      }
     }
 
     const handleNewClick = () => {

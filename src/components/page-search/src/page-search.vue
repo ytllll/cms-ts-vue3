@@ -59,6 +59,7 @@ export default defineComponent({
 
     // 优化三：实现搜索按钮
     const handleQueryClick = () => {
+      console.log(formData.value)
       emit('searchBtnClick', formData.value)
     }
 

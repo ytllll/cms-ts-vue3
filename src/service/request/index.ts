@@ -64,7 +64,7 @@ class TLRequest {
 
         const data = res.data
         // console.log(data)
-        if (data.returnCode === '-1001') {
+        if (data && data.code === '-1001') {
           console.log('请求失败，错误信息')
         } else {
           return data

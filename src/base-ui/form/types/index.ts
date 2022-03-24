@@ -1,4 +1,4 @@
-type IFormType = 'input' | 'password' | 'select' | 'datepicker'
+type IFormType = 'input' | 'password' | 'select' | 'datepicker' | 'file'
 
 export interface IFromItem {
   field: string
@@ -14,6 +14,7 @@ export interface IFromItem {
 }
 
 export interface IForm {
+  title?: string
   formItems: IFromItem[]
   labelWidth?: string
   colLayout?: any

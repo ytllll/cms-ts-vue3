@@ -1,6 +1,17 @@
 <template>
   <div class="goods">
-    <page-content :contentTableConfig="contentTableConfig" pageName="goods">
+    <page-search
+      :searchFormConfig="searchFormConfig"
+      @resetBtnClick="handleResetClick"
+      @searchBtnClick="handleSearchClick"
+    />
+    <page-content
+      ref="pageContentRef"
+      :contentTableConfig="contentTableConfig"
+      pageName="goods"
+      @newBtnClick="handleNewData"
+      @EditBtnClick="handleEditData"
+    >
       <template #status="scope">
         <el-button
           plain
@@ -21,26 +32,70 @@
       <template #oldPrice="scope">{{ '￥' + scope.row.oldPrice }}</template>
       <template #newPrice="scope">{{ '￥' + scope.row.newPrice }}</template>
     </page-content>
+    <page-modal
+      :modalConfig="modalConfigComputed"
+      ref="pageModalRef"
+      pageName="goods"
+      :defaultInfo="defaultInfo"
+    >
+    </page-modal>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import PageContent from '@/components/page-content'
+import { defineComponent, computed } from 'vue'
+import { useStore } from '@/store'
 
+import PageSearch from '@/components/page-search'
+import PageContent from '@/components/page-content'
+import PageModal from '@/components/page-modal'
+
+import { searchFormConfig } from './config/search.config'
 import { contentTableConfig } from './config/content.config'
+import { modalConfig } from './config/modal.config'
+
+import { usePageSearch } from '@/hooks/uesPageSearch'
+import { usePageModal } from '@/hooks/usePageModal'
 
 export default defineComponent({
   name: 'goods',
   components: {
-    PageContent
+    PageSearch,
+    PageContent,
+    PageModal
   },
   setup() {
+    const store = useStore()
+    const modalConfigComputed = computed(() => {
+      const categoryItem = modalConfig.formItems.find(
+        (item) => item.field === 'categoryId'
+      )
+      categoryItem!.options = store.state.entireCategory.map((item: any) => {
+        return { title: item.name, value: item.id }
+      })
+      return modalConfig
+    })
+
+    const [pageContentRef, handleResetClick, handleSearchClick] =
+      usePageSearch()
+
+    const [pageModalRef, defaultInfo, handleNewData, handleEditData] =
+      usePageModal()
+
     return {
-      contentTableConfig
+      searchFormConfig,
+      contentTableConfig,
+      modalConfigComputed,
+      pageContentRef,
+      handleResetClick,
+      handleSearchClick,
+      pageModalRef,
+      defaultInfo,
+      handleNewData,
+      handleEditData
     }
   }
 })
 </script>
 
-<style scoped></style>
+<style scoped lang="less"></style>

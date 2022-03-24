@@ -8,6 +8,7 @@ export interface ILoginResult {
   id: number
   name: string
   token: string
+  overTime: number
 }
 
 // post请求的数据类型

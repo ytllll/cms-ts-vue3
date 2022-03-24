@@ -1,12 +1,21 @@
 import { IForm } from '@/base-ui/form/types/index'
 
 export const modalConfig: IForm = {
+  title: '新建用户',
   formItems: [
     {
       field: 'name',
       type: 'input',
       label: '用户名',
-      placeholder: '请输入用户名'
+      placeholder: '请输入用户名',
+      rules: [
+        { required: true, message: '必须输入用户名', trigger: 'blur' },
+        {
+          pattern: /^[a-z0-9]{6,20}$/,
+          message: '必须是6~20个字母或者数字',
+          trigger: 'blur'
+        }
+      ]
     },
     {
       field: 'realname',

@@ -24,6 +24,11 @@ const routes: RouteRecordRaw[] = [
     path: '/:pathMatch(.*)*',
     name: 'not-found',
     component: () => import('../views/not-found/not-found.vue')
+  },
+  {
+    path: '/main/story/list/main/:storyId',
+    name: 'story-main',
+    component: () => import('../views/main/story/story-main/story-main.vue')
   }
 ]
 
@@ -37,6 +42,11 @@ router.beforeEach((to) => {
   if (to.path !== '/login') {
     const token = localCache.getCache('token')
     if (!token) {
+      return '/login'
+    }
+    const overTime = localCache.getCache('overTIme')
+    const nowTime = new Date().getTime()
+    if (nowTime >= overTime) {
       return '/login'
     }
   }
