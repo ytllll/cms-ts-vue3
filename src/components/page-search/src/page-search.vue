@@ -49,17 +49,18 @@ export default defineComponent({
 
     // 优化二：当用户点击重置按钮
     const handleResetClick = () => {
-      // for (const key in formOriginData) {
-      //   formData.value[`${key}`] = formOriginData[key]
-      // }
+      for (const key in formOriginData) {
+        formData.value[`${key}`] = formOriginData[key]
+      }
 
-      formData.value = formOriginData
+      // formData.value = formOriginData
+      // console.log(formData.value)
       emit('resetBtnClick')
     }
 
     // 优化三：实现搜索按钮
     const handleQueryClick = () => {
-      console.log(formData.value)
+      // console.log(formData.value)
       emit('searchBtnClick', formData.value)
     }
 

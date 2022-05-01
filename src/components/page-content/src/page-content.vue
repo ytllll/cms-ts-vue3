@@ -67,6 +67,7 @@
 import { defineComponent, computed, ref, watch } from 'vue'
 import { useStore } from '@/store'
 import { usePermission } from '@/hooks/usePermission'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 import TlTable from '@/base-ui/table'
 
@@ -145,18 +146,35 @@ export default defineComponent({
 
     // 删除/编辑/新建操作
     const handleDeleteClick = (item: any) => {
-      if (props.pageName === 'goods') {
-        store.dispatch('system/deletePageDataAction', {
-          pageName: props.pageName,
-          id: item.id,
-          imageId: item.imageId
+      ElMessageBox.confirm('确实删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          if (props.pageName === 'goods') {
+            await store.dispatch('system/deletePageDataAction', {
+              pageName: props.pageName,
+              id: item.id,
+              imageId: item.imageId
+            })
+          } else {
+            await store.dispatch('system/deletePageDataAction', {
+              pageName: props.pageName,
+              id: item.id
+            })
+          }
+          ElMessage({
+            type: 'success',
+            message: '删除成功'
+          })
         })
-      } else {
-        store.dispatch('system/deletePageDataAction', {
-          pageName: props.pageName,
-          id: item.id
+        .catch(() => {
+          ElMessage({
+            type: 'info',
+            message: '取消删除'
+          })
         })
-      }
     }
 
     const handleNewClick = () => {

@@ -14,22 +14,16 @@ export const searchFormConfig: IForm = {
   },
   formItems: [
     {
-      field: 'name',
+      field: 'title',
       type: 'input',
-      label: '角色名称',
-      placeholder: '请输入角色名称'
+      label: '故事标题',
+      placeholder: '请输入故事标题'
     },
     {
-      field: 'intro',
-      type: 'input',
-      label: '权限介绍',
-      placeholder: '请输入权限'
-    },
-    {
-      field: 'createTime',
+      field: 'createAt',
       type: 'datepicker',
-      label: '创建时间',
-      placeholder: '请选择创建的时间',
+      label: '发布时间',
+      placeholder: '请选择发布时间段',
       otherOptions: {
         startPlaceholder: '开始时间',
         endPlaceholder: '结束时间',

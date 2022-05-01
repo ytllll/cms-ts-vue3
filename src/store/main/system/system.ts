@@ -28,7 +28,9 @@ const systemModule: Module<ISystemState, IRootState> = {
       categoryCount: 0,
       storyList: [],
       storyCount: 0,
-      storyMain: {}
+      storyMain: {},
+      commentList: [],
+      commentCount: 0
     }
   },
   mutations: {
@@ -79,6 +81,12 @@ const systemModule: Module<ISystemState, IRootState> = {
     },
     changeStoryMain(state, storyMain: any) {
       state.storyMain = storyMain
+    },
+    changeCommentList(state, commentList: any[]) {
+      state.commentList = commentList
+    },
+    changeCommentCount(state, commentCount: number) {
+      state.commentCount = commentCount
     }
   },
   getters: {
@@ -105,10 +113,16 @@ const systemModule: Module<ISystemState, IRootState> = {
     },
 
     async getPageDataAction({ commit }, payload: any) {
+      const pageName = payload.pageName
       const pageUrl = payload.pageUrl
       const pageResult = await getPageData(pageUrl)
 
-      commit('changeStoryMain', pageResult.data)
+      if (pageName === 'story') {
+        commit('changeStoryMain', pageResult.data)
+      } else if (pageName === 'comment') {
+        commit('changeCommentList', pageResult.data.list)
+        commit('changeCommentCount', pageResult.data.totalCount)
+      }
     },
 
     async getPageListAction({ commit }, payload: any) {
@@ -139,6 +153,7 @@ const systemModule: Module<ISystemState, IRootState> = {
       // 2. 调用删除的网络请求
       await deletePageData(pageUrl)
 
+      if (pageName === 'comment') return
       // 3. 重新获取数据
       // 拿取当前查询信息
       const info = context.state.queryInfo
@@ -155,7 +170,12 @@ const systemModule: Module<ISystemState, IRootState> = {
       const pageUrl = `/${pageName}`
       await createPageData(pageUrl, newData)
 
-      if (pageName === 'story') return
+      if (
+        pageName === 'story' ||
+        pageName === 'comment' ||
+        pageName.slice(0, 7) === 'comment'
+      )
+        return
       // 2. 请求最新的数据
       // 拿取当前查询信息
       const info = context.state.queryInfo

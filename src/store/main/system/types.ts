@@ -15,4 +15,6 @@ export interface ISystemState {
   storyList: any[]
   storyCount: number
   storyMain: any
+  commentList: any[]
+  commentCount: number
 }

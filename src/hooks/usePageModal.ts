@@ -21,7 +21,6 @@ export function usePageModal(newCb?: CallBackFn, editCb?: CallBackFn) {
     } else {
       defaultInfo.value = { ...item }
     }
-    defaultInfo.value = { ...item }
     if (pageModalRef.value) {
       pageModalRef.value.dialogVisible = true
     }

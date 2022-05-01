@@ -8,6 +8,7 @@ import './assets/css/index.less'
 // 全局引用
 // import ElementPlus from 'element-plus'
 // import 'element-plus/lib/theme-chalk/index.css'
+const InfiniteScroll = require('vue-infinite-scroll')
 
 import router from './router'
 import store from './store'
@@ -22,6 +23,7 @@ app.use(globalRegister)
 app.use(store)
 setupStore()
 app.use(router)
+app.use(InfiniteScroll)
 
 app.mount('#app')
 // 全局注册element-plus

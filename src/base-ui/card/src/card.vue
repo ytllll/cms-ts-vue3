@@ -2,7 +2,7 @@
   <el-card class="box-card">
     <template #header>
       <div class="card-header">
-        <span>{{ title }}</span>
+        <span @click="openStoryClick()">{{ title }}</span>
       </div>
     </template>
     <div class="item">
@@ -14,15 +14,30 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
+import { useRouter } from 'vue-router'
+
 export default defineComponent({
   props: {
     title: {
       type: String,
       default: 'Title'
+    },
+    storyId: {
+      type: Number
     }
   },
-  setup() {
-    return {}
+  setup(props) {
+    const router = useRouter()
+
+    const openStoryClick = () => {
+      let newpage = router.resolve({})
+      newpage.href = `${newpage.href}/main/${props.storyId}`
+
+      window.open(newpage.href, '_blank')
+    }
+    return {
+      openStoryClick
+    }
   }
 })
 </script>

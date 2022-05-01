@@ -8,7 +8,7 @@
         <el-input type="text" v-model="formData.intro" />
       </el-form-item>
       <el-form-item prop="content">
-        <tl-editor v-model:value="htmlString" />
+        <tl-editor v-model:value="htmlString" :isSubmit="isSubmit" />
       </el-form-item>
       <el-form-item class="submitFormItem">
         <el-button type="primary" @click="submitForm(formDataRef)"
@@ -35,6 +35,7 @@ export default defineComponent({
     const formDataRef = ref<InstanceType<typeof ElForm>>()
 
     const htmlString = ref<string>('')
+    const isSubmit = ref<boolean>(false)
 
     const formData = reactive({
       title: '',
@@ -43,10 +44,15 @@ export default defineComponent({
     })
 
     const submitForm = async () => {
-      console.log({ ...formData, userId: store.state.login.userInfo.id })
       await store.dispatch('system/createPageDataAction', {
         pageName: 'story',
         newData: { ...formData, userId: store.state.login.userInfo.id }
+      })
+      formData.title = ''
+      formData.intro = ''
+      isSubmit.value = true
+      setTimeout(() => {
+        isSubmit.value = false
       })
     }
 
@@ -54,7 +60,8 @@ export default defineComponent({
       formDataRef,
       formData,
       htmlString,
-      submitForm
+      submitForm,
+      isSubmit
     }
   }
 })

@@ -50,9 +50,13 @@ export default defineComponent({
     focus: {
       type: Boolean,
       default: false
+    },
+    isSubmit: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['update:value'],
+  emits: ['update:value', 'clearEditor'],
   setup(props, { emit }) {
     const editorRef = ref<HTMLDivElement | null>(null)
     const isInitContent = ref<boolean>(false)
@@ -66,6 +70,16 @@ export default defineComponent({
       () => props.value,
       () => {
         initEditorContent(props.value, true)
+      }
+    )
+
+    watch(
+      () => props.isSubmit,
+      () => {
+        if (props.isSubmit) initEditorContent(props.value, true)
+      },
+      {
+        deep: true
       }
     )
 
@@ -95,6 +109,9 @@ export default defineComponent({
       if (!htmlStr) return
       isInitContent.value = true
       editor.txt.html(htmlStr)
+      if (props.isSubmit) {
+        editor.txt.clear()
+      }
     }
 
     const setEditorConfig = () => {

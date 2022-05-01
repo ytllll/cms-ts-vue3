@@ -2,7 +2,11 @@
   <div class="page-modal">
     <el-dialog
       v-model="dialogVisible"
-      :title="modalConfig.title"
+      :title="
+        isUpdate
+          ? `编辑${modalConfig.title.replace('新建', '')}`
+          : modalConfig.title
+      "
       width="30%"
       center
       destroy-on-close
@@ -81,11 +85,17 @@ export default defineComponent({
     const dialogVisible = ref(false)
 
     const formData = ref<any>({})
+    const isUpdate = ref<boolean>(false)
 
     const uploadRef = ref<InstanceType<typeof ElUpload>>()
     watch(
       () => props.defaultInfo,
       (newValue) => {
+        if (newValue.id) {
+          isUpdate.value = true
+        } else {
+          isUpdate.value = false
+        }
         for (const item of props.modalConfig.formItems) {
           formData.value[`${item.field}`] = newValue[`${item.field}`]
         }
@@ -142,11 +152,11 @@ export default defineComponent({
             editData: { ...formData.value, ...props.otherInfo },
             id: props.defaultInfo.id
           })
-          if (props.pageName === 'users') {
-            store.dispatch('login/getUserInfo', {
-              id: props.defaultInfo.id
-            })
-          }
+          // if (props.pageName === 'users') {
+          //   store.dispatch('login/getUserInfo', {
+          //     id: props.defaultInfo.id
+          //   })
+          // }
         }
       } else {
         // 新建
@@ -171,7 +181,8 @@ export default defineComponent({
       validateFormClick,
       handleConfirmClick,
       uploadRef,
-      uploadSuccess
+      uploadSuccess,
+      isUpdate
     }
   }
 })
