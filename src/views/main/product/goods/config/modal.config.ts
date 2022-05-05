@@ -7,7 +7,8 @@ export const modalConfig: IForm = {
       field: 'name',
       type: 'input',
       label: '商品名称',
-      placeholder: '请输入商品名称'
+      placeholder: '请输入商品名称',
+      rules: [{ required: true, message: '必须输入上面名称', trigger: 'blur' }]
     },
     {
       field: 'desc',
@@ -19,7 +20,8 @@ export const modalConfig: IForm = {
       field: 'newPrice',
       type: 'input',
       label: '现价格',
-      placeholder: '请输入现价格'
+      placeholder: '请输入现价格',
+      rules: [{ required: true, message: '必须输入现价格', trigger: 'blur' }]
     },
     {
       field: 'oldPrice',

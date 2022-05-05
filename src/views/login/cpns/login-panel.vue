@@ -20,7 +20,7 @@
 
     <div class="account-control">
       <el-checkbox v-model="isKeepPassword">记住密码</el-checkbox>
-      <el-link type="primary">忘记密码</el-link>
+      <!-- <el-link type="primary">忘记密码</el-link> -->
     </div>
 
     <el-button type="primary" class="login-btn" @click="handleLoginClick"
@@ -50,7 +50,7 @@ export default defineComponent({
       if (currentTab.value === 'account') {
         accountRef.value?.loginAction(isKeepPassword.value)
       } else {
-        console.log('phoneRef调用loginAction')
+        phoneRef.value?.loginAction()
       }
     }
 
@@ -67,7 +67,7 @@ export default defineComponent({
 
 <style scoped lang="less">
 .login-panel {
-  width: 320px;
+  width: 340px;
   margin-bottom: 150px;
 
   .title {

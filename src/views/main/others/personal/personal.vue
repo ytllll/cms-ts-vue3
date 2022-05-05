@@ -84,7 +84,7 @@
       :defaultInfo="defaultInfo"
       ref="pageModalRef"
       :modalConfig="modalConfigComputed"
-      pageName="users"
+      pageName="users-person"
     />
   </div>
 </template>

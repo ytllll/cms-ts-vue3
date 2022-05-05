@@ -7,7 +7,8 @@ export const modalConfig: IForm = {
       field: 'name',
       type: 'input',
       label: '菜单名',
-      placeholder: '请输入菜单名'
+      placeholder: '请输入菜单名',
+      rules: [{ required: true, message: '必须输入菜单名称', trigger: 'blur' }]
     },
     {
       field: 'icon',
@@ -24,7 +25,8 @@ export const modalConfig: IForm = {
         { title: '一级菜单', value: 1 },
         { title: '二级菜单', value: 2 },
         { title: '三级菜单', value: 3 }
-      ]
+      ],
+      rules: [{ required: true, message: '必须选择菜单层级', trigger: 'blur' }]
     },
     {
       field: 'url',

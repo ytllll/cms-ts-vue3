@@ -45,6 +45,7 @@
 import { defineComponent, ref, watch } from 'vue'
 import { useStore } from '@/store'
 import type { ElUpload } from 'element-plus'
+import { ElMessage } from 'element-plus'
 
 import PageForm from '@/base-ui/form'
 
@@ -124,55 +125,60 @@ export default defineComponent({
 
     const handleConfirmClick = async () => {
       if (!formRef.value) return
-      formRef.value.validate((valid: any) => {
+      formRef.value.validate(async (valid: any) => {
         if (valid) {
           dialogVisible.value = false
+          if (Object.keys(props.defaultInfo).length) {
+            // 编辑
+            if (props.pageName === 'goods') {
+              store.dispatch('system/editPageDataAction', {
+                pageName: props.pageName,
+                editData: { ...formData.value, ...props.otherInfo, imageId },
+                id: props.defaultInfo.id
+              })
+            } else if (props.pageName === 'users-updatePassword') {
+              await store.dispatch('system/editPageDataAction', {
+                pageName: props.pageName.split('-')[0],
+                editData: { ...formData.value, ...props.otherInfo },
+                id: store.state.login.userInfo.id
+              })
+            } else if (props.pageName === 'users-person') {
+              await store.dispatch('system/editPageDataAction', {
+                pageName: props.pageName.split('-')[0],
+                editData: { ...formData.value, ...props.otherInfo },
+                id: props.defaultInfo.id
+              })
+            } else {
+              await store.dispatch('system/editPageDataAction', {
+                pageName: props.pageName,
+                editData: { ...formData.value, ...props.otherInfo },
+                id: props.defaultInfo.id
+              })
+            }
+            if (props.pageName === 'users-person') {
+              store.dispatch('login/getUserInfo', {
+                id: props.defaultInfo.id
+              })
+            }
+          } else {
+            // 新建
+            if (props.pageName === 'goods') {
+              await store.dispatch('system/createPageDataAction', {
+                pageName: props.pageName,
+                newData: { ...formData.value, ...props.otherInfo, imageId }
+              })
+            } else {
+              await store.dispatch('system/createPageDataAction', {
+                pageName: props.pageName,
+                newData: { ...formData.value, ...props.otherInfo }
+              })
+            }
+          }
+          imageId = null
         } else {
-          console.log('error submit!')
+          ElMessage.warning('请输入必填项')
         }
       })
-
-      if (Object.keys(props.defaultInfo).length) {
-        // 编辑
-        if (props.pageName === 'goods') {
-          store.dispatch('system/editPageDataAction', {
-            pageName: props.pageName,
-            editData: { ...formData.value, ...props.otherInfo, imageId },
-            id: props.defaultInfo.id
-          })
-        } else if (props.pageName === 'users-updatePassword') {
-          await store.dispatch('system/editPageDataAction', {
-            pageName: props.pageName.split('-')[0],
-            editData: { ...formData.value, ...props.otherInfo },
-            id: store.state.login.userInfo.id
-          })
-        } else {
-          await store.dispatch('system/editPageDataAction', {
-            pageName: props.pageName,
-            editData: { ...formData.value, ...props.otherInfo },
-            id: props.defaultInfo.id
-          })
-          // if (props.pageName === 'users') {
-          //   store.dispatch('login/getUserInfo', {
-          //     id: props.defaultInfo.id
-          //   })
-          // }
-        }
-      } else {
-        // 新建
-        if (props.pageName === 'goods') {
-          await store.dispatch('system/createPageDataAction', {
-            pageName: props.pageName,
-            newData: { ...formData.value, ...props.otherInfo, imageId }
-          })
-        } else {
-          await store.dispatch('system/createPageDataAction', {
-            pageName: props.pageName,
-            newData: { ...formData.value, ...props.otherInfo }
-          })
-        }
-      }
-      imageId = null
     }
 
     return {

@@ -28,13 +28,29 @@ export const modalConfig: IForm = {
       type: 'password',
       label: '密码',
       placeholder: '请输入密码',
-      isHidden: false
+      isHidden: false,
+      rules: [
+        { required: true, message: '必须输入密码', trigger: 'blur' },
+        {
+          pattern: /^[a-z0-9]{6,}$/,
+          message: '必须是6~20个字母或者数字',
+          trigger: 'blur'
+        }
+      ]
     },
     {
       field: 'cellphone',
       type: 'input',
       label: '电话号码',
-      placeholder: '请输入电话号码'
+      placeholder: '请输入电话号码',
+      rules: [
+        { required: true, message: '必须输入电话号码', trigger: 'blur' },
+        {
+          pattern: /^1[345789]\d{9}$/,
+          message: '请输入正确的电话号码',
+          trigger: 'blur'
+        }
+      ]
     },
     {
       field: 'departmentId',
@@ -48,7 +64,8 @@ export const modalConfig: IForm = {
       type: 'select',
       label: '选择角色',
       placeholder: '请选择角色',
-      options: []
+      options: [],
+      rules: [{ required: true, message: '必须选择角色', trigger: 'blur' }]
     }
   ],
   colLayout: { span: 24 },

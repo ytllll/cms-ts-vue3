@@ -18,6 +18,7 @@
 import { defineComponent, reactive, ref } from 'vue'
 import { ElForm } from 'element-plus'
 import { useStore } from 'vuex'
+import { ElMessage } from 'element-plus'
 // 验证规则
 import { rules } from '../config/account-config'
 import localCache from '../../../utils/cache'
@@ -51,10 +52,16 @@ export default defineComponent({
             localCache.deleteCahe('password')
           }
           //2. 开始进行登录验证
-          store.dispatch('login/accountLoginAction', { ...account })
+          store
+            .dispatch('login/accountLoginAction', { ...account })
+            .then((value) => {
+              if (value?.code === 400) {
+                ElMessage.error('登录失败，请输入正确的账号和密码')
+              }
+            })
           // console.log(account)
         } else {
-          console.log('登录失败')
+          ElMessage.error('登录失败，请输入正确的账号和密码')
         }
       })
     }

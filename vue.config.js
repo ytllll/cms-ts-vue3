@@ -8,7 +8,7 @@ module.exports = {
     proxy: {
       '^/api': {
         // 接口地址
-        target: 'http://120.79.177.110:8001',
+        target: 'http://localhost:8000',
         pathRewrite: {
           '^/api': ''
         },

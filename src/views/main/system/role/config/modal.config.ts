@@ -7,7 +7,8 @@ export const modalConfig: IForm = {
       field: 'name',
       type: 'input',
       label: '角色名',
-      placeholder: '请输入角色名'
+      placeholder: '请输入角色名',
+      rules: [{ required: true, message: '必须输入角色名称', trigger: 'blur' }]
     },
     {
       field: 'intro',

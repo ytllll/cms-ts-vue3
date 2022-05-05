@@ -74,7 +74,7 @@ export default defineComponent({
       usePageModal(undefined, editCallback)
 
     const menus = computed(() => store.state.entireMenu)
-    console.log(menus)
+    // console.log(menus)
 
     const otherInfo = ref({})
 

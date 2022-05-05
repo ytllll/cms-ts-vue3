@@ -16,6 +16,7 @@ export function usePageModal(newCb?: CallBackFn, editCb?: CallBackFn) {
 
   const handleEditData = (item: any) => {
     const item2: any = editCb && editCb(item)
+    // console.log(item2)
     if (item2) {
       defaultInfo.value = { ...item2 }
     } else {

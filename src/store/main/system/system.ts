@@ -8,6 +8,7 @@ import {
   editPageData,
   getPageData
 } from '@/service/main/system/system'
+import { ElMessage } from 'element-plus'
 
 const systemModule: Module<ISystemState, IRootState> = {
   namespaced: true,
@@ -168,7 +169,12 @@ const systemModule: Module<ISystemState, IRootState> = {
       // 1. 创建数据的请求
       const { pageName, newData } = payload
       const pageUrl = `/${pageName}`
-      await createPageData(pageUrl, newData)
+      const result = await createPageData(pageUrl, newData)
+      if (result?.code === 200) {
+        ElMessage.success('新建成功')
+      } else {
+        ElMessage.error('新建失败')
+      }
 
       if (
         pageName === 'story' ||
@@ -190,7 +196,12 @@ const systemModule: Module<ISystemState, IRootState> = {
       // 1. 编辑数据的请求
       const { pageName, editData, id } = payload
       const pageUrl = `/${pageName}/${id}`
-      await editPageData(pageUrl, editData)
+      const result = await editPageData(pageUrl, editData)
+      if (result?.code === 200) {
+        ElMessage.success('编辑成功')
+      } else {
+        ElMessage.error('编辑失败')
+      }
 
       // 2. 请求最新的数据
       // 拿取当前查询信息

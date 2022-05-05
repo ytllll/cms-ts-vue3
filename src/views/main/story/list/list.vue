@@ -160,7 +160,7 @@ export default defineComponent({
     getPageData(0)
 
     const handleSearchClick = async (queryInfo: any) => {
-      console.log(queryInfo)
+      // console.log(queryInfo)
       if (!isQuery) return // 如果没有查询权限，直接返回
       isLoad.value = true
 
@@ -207,7 +207,7 @@ export default defineComponent({
         isLoad.value = true
         setTimeout(() => {
           getPageData(5)
-          console.log('加载数据')
+          // console.log('加载数据')
           isLoad.value = false
         }, 1000)
       }

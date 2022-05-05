@@ -44,7 +44,8 @@ import {
   ElUpload,
   ElScrollbar,
   ElDivider,
-  ElPopconfirm
+  ElPopconfirm,
+  ElMessage
 } from 'element-plus'
 // 基础样式可以统一引用
 import 'element-plus/lib/theme-chalk/base.css'
@@ -93,7 +94,8 @@ const components = [
   ElUpload,
   ElScrollbar,
   ElDivider,
-  ElPopconfirm
+  ElPopconfirm,
+  ElMessage
 ]
 // 封装element-plus的组件局部注册
 export default function (app: App): void {
